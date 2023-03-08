@@ -26,6 +26,7 @@ CREATE TABLE tenmo_user (
 	username varchar(50) UNIQUE NOT NULL,
 	password_hash varchar(200) NOT NULL,
 	role varchar(20),
+	balance numeric,
 	CONSTRAINT PK_tenmo_user PRIMARY KEY (user_id),
 	CONSTRAINT UQ_username UNIQUE (username)
 );
