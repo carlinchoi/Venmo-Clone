@@ -99,6 +99,7 @@ public class JdbcUserDao implements UserDao {
     //Finish this method that we added
     @Override
     public void updateUser(User user) {
+
     }
 
     private User mapRowToUser(SqlRowSet rs) {

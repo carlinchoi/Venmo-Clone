@@ -16,7 +16,6 @@ public interface UserDao {
 
     boolean create(String username, String password);
 
-    //Make sure this is included in the jdbcUserDao
     void updateUser(User user);
 
 

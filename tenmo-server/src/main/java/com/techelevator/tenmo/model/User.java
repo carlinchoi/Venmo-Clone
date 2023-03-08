@@ -2,6 +2,7 @@ package com.techelevator.tenmo.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -15,8 +16,11 @@ public class User {
    @JsonIgnore
    private boolean activated;
    private Set<Authority> authorities = new HashSet<>();
+   private BigDecimal balance;
 
    public User() { }
+
+
 
    public User(int id, String username, String password, String authorities) {
       this.id = id;
@@ -64,6 +68,14 @@ public class User {
 
    public void setAuthorities(Set<Authority> authorities) {
       this.authorities = authorities;
+   }
+
+   public BigDecimal getBalance() {
+      return balance;
+   }
+
+   public void setBalance(BigDecimal balance) {
+      this.balance = balance;
    }
 
    public void setAuthorities(String authorities) {
