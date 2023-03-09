@@ -17,19 +17,19 @@ public class Transaction {
     private BigDecimal amount;
 
     @NotBlank(message = "The transfer status cannot be blank")
-    private String transferStatus;
+    private int transferStatus;
 
     public Transaction () {
     }
 
-    public Transaction(int fromUserId, int toUserId, BigDecimal amount, String transferStatus) {
+    public Transaction(int fromUserId, int toUserId, BigDecimal amount, int transferStatus) {
         this.fromUserId = fromUserId;
         this.toUserId = toUserId;
         this.amount = amount;
         this.transferStatus = transferStatus;
     }
 
-    public Transaction(int transactionId, int fromUserId, int toUserId, BigDecimal amount, String transferStatus) {
+    public Transaction(int transactionId, int fromUserId, int toUserId, BigDecimal amount, int transferStatus) {
         this.transactionId = transactionId;
         this.fromUserId = fromUserId;
         this.toUserId = toUserId;
@@ -69,11 +69,11 @@ public class Transaction {
         this.amount = amount;
     }
 
-    public String getTransferStatus() {
+    public int getTransferStatus() {
         return transferStatus;
     }
 
-    public void setTransferStatus(String transferStatus) {
+    public void setTransferStatus(int transferStatus) {
         this.transferStatus = transferStatus;
     }
 

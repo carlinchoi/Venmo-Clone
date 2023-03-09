@@ -1,46 +1,62 @@
 package com.techelevator.tenmo.dao;
 
 import com.techelevator.tenmo.model.Transaction;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.support.rowset.SqlRowSet;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class JdbcTransactionDao implements TransactionDao {
-    
-    private static List <Transaction> transactions = new ArrayList<>();
-    @Override
-    public Transaction createTransaction(Transaction transaction) {
-        transaction.setTransactionId(getMaxIdPlusOne());
-        transactions.add(transaction);
-        return transaction;
+
+    private final JdbcTemplate jdbcTemplate;
+
+    public JdbcTransactionDao(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
     }
 
     @Override
-    public List<Transaction> listTransaction(int userId) {
+    public void createTransaction(Transaction newTransaction) {
+        String sql = "INSERT INTO transfer(" +
+                "transfer_type_id, transfer_status_id, account_from, account_to, amount)" +
+                "VALUES (?, ?, ?, ?, ?);";
+        jdbcTemplate.update(sql, 1, 1, newTransaction.getFromUserId(), newTransaction.getToUserId(), newTransaction.getAmount());
+    }
+
+    @Override
+    public List<Transaction> listTransaction(int id) {
+        List<Transaction> transactions = new ArrayList<>();
+        String sql = "SELECT transfer_id, transfer_type_id, transfer_status_id, account_from, account_to, amount" +
+                "FROM transfer;";
+        SqlRowSet results = jdbcTemplate.queryForRowSet(sql);
+        while (results.next()) {
+            Transaction transaction = mapRowToTransaction(results);
+            transactions.add(transaction);
+        }
         return transactions;
     }
 
     @Override
     public Transaction getTransaction(int transactionId) {
-        for (Transaction transaction : transactions) {
-            if (transaction.getTransactionId() == transactionId) {
-                return transaction;
-            }
+        String sql = "SELECT transfer_id, transfer_type_id, transfer_status_id, account_from, account_to, amount" +
+                "FROM transfer WHERE transfer_id = ?;";
+        SqlRowSet results = jdbcTemplate.queryForRowSet(sql, transactionId);
+        if (results.next()) {
+            return mapRowToTransaction(results);
+        } else {
+            return null;
         }
-        return null;
-    }
-    
-    private int getMaxId() {
-        int maxId = 0;
-        for (Transaction transaction : transactions) {
-            if (transaction.getTransactionId() > maxId) {
-                maxId = transaction.getTransactionId();
-            }
-        }
-        return maxId;
     }
 
-    private int getMaxIdPlusOne() {
-        return getMaxId() + 1;
+
+    private Transaction mapRowToTransaction(SqlRowSet results) {
+        Transaction transaction = new Transaction();
+        transaction.setTransactionId(results.getInt("transfer_id"));
+        transaction.setFromUserId(results.getInt("account_from"));
+        transaction.setToUserId(results.getInt("account_to"));
+        transaction.setAmount(results.getBigDecimal("amount"));
+        transaction.setTransferStatus(results.getInt("transfer_status_id"));
+        return transaction;
     }
+
 }
