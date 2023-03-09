@@ -30,6 +30,14 @@ public class User {
       this.activated = true;
    }
 
+   public User(int id, String username, String password, String authorities, BigDecimal balance) {
+      this.id = id;
+      this.username = username;
+      this.password = password;
+      if(authorities != null) this.setAuthorities(authorities);
+      this.balance = balance;
+   }
+
    public int getId() {
       return id;
    }

@@ -119,7 +119,7 @@ public class JdbcUserDaoTests extends BaseDaoTests {
         User testUser = new User(1, "user1", "user1", "ROLE_USER");
         testUser.setBalance(new BigDecimal("1000"));
 
-        Assert.assertEquals(testUser.getBalance(), sut.getUserById(1).getBalance());
+        Assert.assertEquals(testUser.getBalance(), sut.getUserById(1001).getBalance());
 
     }
 }

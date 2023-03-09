@@ -5,13 +5,13 @@ import com.techelevator.tenmo.dao.JdbcTransactionDao;
 import com.techelevator.tenmo.dao.JdbcUserDao;
 import com.techelevator.tenmo.dao.TransactionDao;
 import com.techelevator.tenmo.dao.UserDao;
-import com.techelevator.tenmo.model.User;
 import com.techelevator.tenmo.model.UserDto;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.jdbc.core.JdbcTemplate;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,7 +45,7 @@ public class TEnmoControllerTests extends BaseDaoTests{
 
     @Test
     public void getBalance_returns_correct_balance(){
-        Assert.assertEquals(1000, sut.getBalance(1));
+        Assert.assertEquals(new BigDecimal("1000"), sut.getBalance(1001));
 
 
     }

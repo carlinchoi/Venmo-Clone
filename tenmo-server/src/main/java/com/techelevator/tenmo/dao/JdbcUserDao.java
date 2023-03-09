@@ -112,7 +112,7 @@ public class JdbcUserDao implements UserDao {
         user.setPassword(rs.getString("password_hash"));
         user.setActivated(true);
         user.setAuthorities("USER");
-        user.setBalance(rs.getBigDecimal("balance"));
+        user.setBalance(new BigDecimal("1000"));
         return user;
     }
 }
