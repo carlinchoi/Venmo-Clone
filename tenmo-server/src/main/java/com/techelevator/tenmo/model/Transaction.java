@@ -92,6 +92,6 @@ public class Transaction {
 
     @Override
         public String toString() {
-            return "Auction{" + "FromUserId=" + fromUserId + "ToUserId = " + toUserId +", amount= " + amount + '\'' + ", TransferStatus= " + transferStatus + '}';
+            return "Transfer{" + "FromUserId=" + fromUserId + ", ToUserId = " + toUserId +", amount= " + amount + ", TransferType= " + transferTypeId + ", TransferStatus= " + transferStatus + '}';
         }
 }

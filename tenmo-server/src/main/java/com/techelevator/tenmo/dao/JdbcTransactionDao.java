@@ -19,19 +19,19 @@ public class JdbcTransactionDao implements TransactionDao {
     @Override
     public Transaction createTransaction(Transaction newTransaction) {
         String sql = "INSERT INTO transfer(" +
-                "transfer_type_id, transfer_status_id, account_from, account_to, amount)" +
-                "VALUES (?, ?, ?, ?, ?);";
+                "transfer_type_id, transfer_status_id, account_from, account_to, amount) " +
+                "VALUES (?, ?, ?, ?, ?) RETURNING transfer_id;";
         Integer newId = jdbcTemplate.queryForObject(sql, Integer.class, 1, 1,
                 newTransaction.getFromUserId(), newTransaction.getToUserId(), newTransaction.getAmount());
         return getTransaction(newId);
     }
 
     @Override
-    public List<Transaction> listTransaction(int id) {
+    public List<Transaction> listTransaction(int userId) {
         List<Transaction> transactions = new ArrayList<>();
-        String sql = "SELECT transfer_id, transfer_type_id, transfer_status_id, account_from, account_to, amount" +
-                "FROM transfer;";
-        SqlRowSet results = jdbcTemplate.queryForRowSet(sql);
+        String sql = "SELECT transfer_id, transfer_type_id, transfer_status_id, account_from, account_to, amount " +
+                "FROM transfer WHERE account_from = ? OR account_to = ?;";
+        SqlRowSet results = jdbcTemplate.queryForRowSet(sql, userId, userId);
         while (results.next()) {
             Transaction transaction = mapRowToTransaction(results);
             transactions.add(transaction);
@@ -41,7 +41,7 @@ public class JdbcTransactionDao implements TransactionDao {
 
     @Override
     public Transaction getTransaction(int transactionId) {
-        String sql = "SELECT transfer_id, transfer_type_id, transfer_status_id, account_from, account_to, amount" +
+        String sql = "SELECT transfer_id, transfer_type_id, transfer_status_id, account_from, account_to, amount " +
                 "FROM transfer WHERE transfer_id = ?;";
         SqlRowSet results = jdbcTemplate.queryForRowSet(sql, transactionId);
         if (results.next()) {
