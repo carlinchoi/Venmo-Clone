@@ -65,12 +65,13 @@ CREATE TABLE transfer (
 	CONSTRAINT CK_transfer_amount_gt_0 CHECK (amount > 0)
 );
 
-INSERT INTO transfer_status (transfer_status_desc) VALUES ('Pending');
 INSERT INTO transfer_status (transfer_status_desc) VALUES ('Approved');
+INSERT INTO transfer_status (transfer_status_desc) VALUES ('Pending');
 INSERT INTO transfer_status (transfer_status_desc) VALUES ('Rejected');
 
-INSERT INTO transfer_type (transfer_type_desc) VALUES ('Request');
 INSERT INTO transfer_type (transfer_type_desc) VALUES ('Send');
+INSERT INTO transfer_type (transfer_type_desc) VALUES ('Request');
+
 
 INSERT INTO tenmo_user (username,password_hash,role,balance) VALUES ('user1','user1','ROLE_USER','1000'); -- 1001
 INSERT INTO tenmo_user (username,password_hash,role,balance) VALUES ('user2','user2','ROLE_USER','1000'); -- 1002
