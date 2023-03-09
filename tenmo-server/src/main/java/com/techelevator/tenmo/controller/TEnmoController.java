@@ -34,19 +34,33 @@ public class TEnmoController {
         for (User user : users) {
             userDtos.add(new UserDto(user.getId(), user.getUsername()));
         }
-        return userDtos;
+        if (userDtos.size() > 0) {
+            return userDtos;
+        } else {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No users found. This should not be possible");
+        }
     }
 
 
     @RequestMapping(path = "/users/{id}", method = RequestMethod.GET)
     public BigDecimal getBalance(@PathVariable("id") int userId){
-        return userDao.getUserById(userId).getBalance();
+        BigDecimal balance = userDao.getUserById(userId).getBalance();
+        if(balance != null) {
+            return balance;
+        } else {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No balance found. This should not be possible.");
+        }
     }
 
     @RequestMapping(path = "/users/{id}/transfers", method = RequestMethod.GET)
     public List<Transaction> listTransactionsOfUser(@PathVariable("id") int userId){
         User currentUser = userDao.getUserById(userId);
-        return transactionDao.listTransaction(currentUser.getId());
+        List<Transaction> transactions = transactionDao.listTransaction(currentUser.getId());
+        if (transactions != null) {
+            return transactions;
+        } else {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No transactions found.");
+        }
 
     }
 
@@ -67,12 +81,15 @@ public class TEnmoController {
         Transaction transaction = new Transaction(fromUserId, toUserId, amount, 1, 1);
         User fromUser = userDao.getUserById(fromUserId);
         User toUser = userDao.getUserById(toUserId);
-        if (userDao.getUserById(fromUserId).getBalance().compareTo(amount) >= 0) {
+        if (toUser == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Receiving account not found.");
+        }else if(userDao.getUserById(fromUserId).getBalance().compareTo(amount) < 0) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Insufficient balance.");
+        } else {
             BigDecimal newBalance = fromUser.getBalance().subtract(amount);
             updateBalance(fromUserId, newBalance);
+            updateBalance(toUserId, toUser.getBalance().add(amount));
             transactionDao.createTransaction(transaction);
-        } else {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Insufficient account balance.");
         }
     }
 
