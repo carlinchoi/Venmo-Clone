@@ -13,6 +13,8 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
+import static java.util.Collections.list;
+
 @Component
 public class JdbcUserDao implements UserDao {
 
@@ -99,7 +101,8 @@ public class JdbcUserDao implements UserDao {
     //Finish this method that we added
     @Override
     public void updateUser(User user) {
-
+        String sql = "UPDATE tenmo_user" + "SET balance = ?" + "WHERE user_id = ?";
+        jdbcTemplate.update(sql, user.getBalance());
     }
 
     private User mapRowToUser(SqlRowSet rs) {
