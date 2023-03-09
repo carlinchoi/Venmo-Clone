@@ -55,7 +55,7 @@ public class TEnmoControllerTests extends BaseDaoTests{
 
     @Test
     public void listTransactionsOfUser_returns_correct_transactions(){
-        Assert.assertEquals();
+      //  Assert.assertEquals();
     }
 
     @Test
