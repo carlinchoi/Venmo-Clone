@@ -54,13 +54,12 @@ public class TEnmoController {
     public Transaction getTransactionDetails(@PathVariable("userid") int userId, @PathVariable("transferid") int transferId){
         User currentUser = userDao.getUserById(userId);
         return transactionDao.getTransaction(transferId);
-
     }
 
 
     @RequestMapping(path = "/users/{id}/", method = RequestMethod.POST)
     public void transfer(int fromUserId, int toUserId, BigDecimal amount){
-        Transaction transaction = new Transaction(fromUserId, toUserId, amount, "Approved");
+        Transaction transaction = new Transaction(fromUserId, toUserId, amount, "");
         User fromUser = userDao.getUserById(fromUserId);
         User toUser = userDao.getUserById(toUserId);
         if (userDao.getUserById(fromUserId).getBalance().compareTo(amount) >= 0) {
