@@ -1,6 +1,7 @@
 package com.techelevator.tenmo.dao;
 
 import com.techelevator.tenmo.model.Transaction;
+import org.springframework.data.relational.core.sql.In;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 
@@ -16,11 +17,13 @@ public class JdbcTransactionDao implements TransactionDao {
     }
 
     @Override
-    public void createTransaction(Transaction newTransaction) {
+    public Transaction createTransaction(Transaction newTransaction) {
         String sql = "INSERT INTO transfer(" +
                 "transfer_type_id, transfer_status_id, account_from, account_to, amount)" +
                 "VALUES (?, ?, ?, ?, ?);";
-        jdbcTemplate.update(sql, 1, 1, newTransaction.getFromUserId(), newTransaction.getToUserId(), newTransaction.getAmount());
+        Integer newId = jdbcTemplate.queryForObject(sql, Integer.class, 1, 1,
+                newTransaction.getFromUserId(), newTransaction.getToUserId(), newTransaction.getAmount());
+        return getTransaction(newId);
     }
 
     @Override
@@ -56,6 +59,7 @@ public class JdbcTransactionDao implements TransactionDao {
         transaction.setToUserId(results.getInt("account_to"));
         transaction.setAmount(results.getBigDecimal("amount"));
         transaction.setTransferStatus(results.getInt("transfer_status_id"));
+        transaction.setTransferTypeId(results.getInt("transfer_type_id"));
         return transaction;
     }
 

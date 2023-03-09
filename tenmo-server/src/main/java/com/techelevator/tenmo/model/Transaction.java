@@ -19,22 +19,27 @@ public class Transaction {
     @NotBlank(message = "The transfer status cannot be blank")
     private int transferStatus;
 
+    @NotBlank(message = "The transfer type cannot be blank")
+    private int transferTypeId;
+
     public Transaction () {
     }
 
-    public Transaction(int fromUserId, int toUserId, BigDecimal amount, int transferStatus) {
+    public Transaction(int fromUserId, int toUserId, BigDecimal amount, int transferStatus, int transferTypeId) {
         this.fromUserId = fromUserId;
         this.toUserId = toUserId;
         this.amount = amount;
         this.transferStatus = transferStatus;
+        this.transferTypeId = transferTypeId;
     }
 
-    public Transaction(int transactionId, int fromUserId, int toUserId, BigDecimal amount, int transferStatus) {
+    public Transaction(int transactionId, int fromUserId, int toUserId, BigDecimal amount, int transferStatus, int transferTypeId) {
         this.transactionId = transactionId;
         this.fromUserId = fromUserId;
         this.toUserId = toUserId;
         this.amount = amount;
         this.transferStatus = transferStatus;
+        this.transferTypeId = transferTypeId;
     }
 
     public int getTransactionId() {
@@ -75,6 +80,14 @@ public class Transaction {
 
     public void setTransferStatus(int transferStatus) {
         this.transferStatus = transferStatus;
+    }
+
+    public int getTransferTypeId() {
+        return transferTypeId;
+    }
+
+    public void setTransferTypeId(int transferTypeId) {
+        this.transferTypeId = transferTypeId;
     }
 
     @Override
