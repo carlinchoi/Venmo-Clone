@@ -4,10 +4,12 @@ import com.techelevator.tenmo.model.Transaction;
 import org.springframework.data.relational.core.sql.In;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Component
 public class JdbcTransactionDao implements TransactionDao {
 
     private final JdbcTemplate jdbcTemplate;

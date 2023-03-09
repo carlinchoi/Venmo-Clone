@@ -1,4 +1,4 @@
-package com.techelevator.dao;
+package com.techelevator.tenmo;
 
 import com.techelevator.tenmo.controller.TEnmoController;
 import com.techelevator.tenmo.dao.JdbcTransactionDao;
