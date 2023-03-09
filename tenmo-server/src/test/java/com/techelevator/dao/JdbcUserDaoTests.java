@@ -9,6 +9,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public class JdbcUserDaoTests extends BaseDaoTests {
@@ -111,5 +112,14 @@ public class JdbcUserDaoTests extends BaseDaoTests {
 
         actualUser.setPassword(newUser.getPassword()); // reset password back to unhashed password for testing
         Assert.assertEquals(newUser, actualUser);
+    }
+
+    @Test
+    public void getUserById_returns_balance() {
+        User testUser = new User(1, "user1", "user1", "ROLE_USER");
+        testUser.setBalance(new BigDecimal("1000"));
+
+        Assert.assertEquals(testUser.getBalance(), sut.getUserById(1).getBalance());
+
     }
 }

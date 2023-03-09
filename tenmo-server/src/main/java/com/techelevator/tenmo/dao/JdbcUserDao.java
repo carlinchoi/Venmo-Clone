@@ -41,7 +41,7 @@ public class JdbcUserDao implements UserDao {
 
     @Override
     public User getUserById(int userId) {
-        String sql = "SELECT user_id, username, password_hash FROM tenmo_user WHERE user_id = ?";
+        String sql = "SELECT user_id, username, password_hash, balance FROM tenmo_user WHERE user_id = ?";
         SqlRowSet results = jdbcTemplate.queryForRowSet(sql, userId);
         if (results.next()) {
             return mapRowToUser(results);
@@ -53,7 +53,7 @@ public class JdbcUserDao implements UserDao {
     @Override
     public List<User> findAll() {
         List<User> users = new ArrayList<>();
-        String sql = "SELECT user_id, username, password_hash FROM tenmo_user";
+        String sql = "SELECT user_id, username, password_hash, balance FROM tenmo_user";
 
         SqlRowSet results = jdbcTemplate.queryForRowSet(sql);
         while (results.next()) {
@@ -68,7 +68,7 @@ public class JdbcUserDao implements UserDao {
     public User findByUsername(String username) {
         if (username == null) throw new IllegalArgumentException("Username cannot be null");
 
-        String sql = "SELECT user_id, username, password_hash FROM tenmo_user WHERE username = ?;";
+        String sql = "SELECT user_id, username, password_hash, balance FROM tenmo_user WHERE username = ?;";
         SqlRowSet rowSet = jdbcTemplate.queryForRowSet(sql, username);
         if (rowSet.next()) {
             return mapRowToUser(rowSet);
@@ -80,24 +80,24 @@ public class JdbcUserDao implements UserDao {
     public boolean create(String username, String password) {
 
         // create user
-        String sql = "INSERT INTO tenmo_user (username, password_hash) VALUES (?, ?) RETURNING user_id";
+        String sql = "INSERT INTO tenmo_user (username, password_hash, balance) VALUES (?, ?, 1000) RETURNING user_id";
         String password_hash = new BCryptPasswordEncoder().encode(password);
         Integer newUserId;
         newUserId = jdbcTemplate.queryForObject(sql, Integer.class, username, password_hash);
 
-        if (newUserId == null) return false;
+        return newUserId != null;
 
         // create account
-        sql = "INSERT INTO account (user_id, balance) values(?, ?)";
-        try {
-            jdbcTemplate.update(sql, newUserId, STARTING_BALANCE);
-        } catch (DataAccessException e) {
-            return false;
-        }
-
-        return true;
+//        sql = "INSERT INTO account (user_id, balance) values(?, ?)";
+//        try {
+//            jdbcTemplate.update(sql, newUserId, STARTING_BALANCE);
+//        } catch (DataAccessException e) {
+//            return false;
+//        }
+//
+//        return true;
+//    }
     }
-
     //Finish this method that we added
     @Override
     public void updateUser(User user) {
@@ -112,6 +112,7 @@ public class JdbcUserDao implements UserDao {
         user.setPassword(rs.getString("password_hash"));
         user.setActivated(true);
         user.setAuthorities("USER");
+        user.setBalance(rs.getBigDecimal("balance"));
         return user;
     }
 }

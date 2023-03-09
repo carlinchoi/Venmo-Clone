@@ -26,7 +26,7 @@ CREATE TABLE tenmo_user (
 	username varchar(50) UNIQUE NOT NULL,
 	password_hash varchar(200) NOT NULL,
 	role varchar(20),
-	balance numeric,
+	balance decimal(13, 2) NOT NULL,
 	CONSTRAINT PK_tenmo_user PRIMARY KEY (user_id),
 	CONSTRAINT UQ_username UNIQUE (username)
 );
@@ -73,8 +73,8 @@ INSERT INTO transfer_type (transfer_type_desc) VALUES ('Send');
 INSERT INTO transfer_type (transfer_type_desc) VALUES ('Request');
 
 
-INSERT INTO tenmo_user (username,password_hash,role,balance) VALUES ('user1','user1','ROLE_USER','1000'); -- 1001
-INSERT INTO tenmo_user (username,password_hash,role,balance) VALUES ('user2','user2','ROLE_USER','1000'); -- 1002
-INSERT INTO tenmo_user (username,password_hash,role,balance) VALUES ('user3','user3','ROLE_USER','1000');
+INSERT INTO tenmo_user (username,password_hash,role,balance) VALUES ('user1','user1','ROLE_USER',1000); -- 1001
+INSERT INTO tenmo_user (username,password_hash,role,balance) VALUES ('user2','user2','ROLE_USER',1000); -- 1002
+INSERT INTO tenmo_user (username,password_hash,role,balance) VALUES ('user3','user3','ROLE_USER',1000);
 
 COMMIT TRANSACTION;

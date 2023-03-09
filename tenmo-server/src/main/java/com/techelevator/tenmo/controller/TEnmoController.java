@@ -53,7 +53,12 @@ public class TEnmoController {
     @RequestMapping(path = "/users/{userid}/transfers/{transferid}", method = RequestMethod.GET)
     public Transaction getTransactionDetails(@PathVariable("userid") int userId, @PathVariable("transferid") int transferId){
         User currentUser = userDao.getUserById(userId);
-        return transactionDao.getTransaction(transferId);
+        Transaction transaction = transactionDao.getTransaction(transferId);
+        if (transaction != null){
+            return transaction;
+        }else {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No such transaction found.");
+        }
     }
 
 
