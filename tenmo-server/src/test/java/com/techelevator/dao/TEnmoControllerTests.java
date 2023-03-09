@@ -9,7 +9,9 @@ import com.techelevator.tenmo.model.UserDto;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -43,6 +45,7 @@ public class TEnmoControllerTests extends BaseDaoTests{
         Assert.assertEquals("user2", sut.listUsers().get(1).getUsername());
     }
 
+
     @Test
     public void getBalance_returns_correct_balance(){
         Assert.assertEquals(new BigDecimal("1000"), sut.getBalance(1001));
@@ -52,7 +55,7 @@ public class TEnmoControllerTests extends BaseDaoTests{
 
     @Test
     public void listTransactionsOfUser_returns_correct_transactions(){
-        //Assert.assertEquals();
+        Assert.assertEquals();
     }
 
     @Test
