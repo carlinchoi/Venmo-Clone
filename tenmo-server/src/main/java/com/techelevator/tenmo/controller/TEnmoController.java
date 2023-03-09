@@ -64,7 +64,7 @@ public class TEnmoController {
 
     @RequestMapping(path = "/users/{id}/", method = RequestMethod.POST)
     public void transfer(int fromUserId, int toUserId, BigDecimal amount){
-        Transaction transaction = new Transaction(fromUserId, toUserId, amount, 1);
+        Transaction transaction = new Transaction(fromUserId, toUserId, amount, 1, 1);
         User fromUser = userDao.getUserById(fromUserId);
         User toUser = userDao.getUserById(toUserId);
         if (userDao.getUserById(fromUserId).getBalance().compareTo(amount) >= 0) {
