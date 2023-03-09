@@ -30,7 +30,7 @@ public class TEnmoControllerTests extends BaseDaoTests{
     public void setup() {
         JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
         userDao = new JdbcUserDao(jdbcTemplate);
-        transactionDao = new JdbcTransactionDao();
+        transactionDao = new JdbcTransactionDao(jdbcTemplate);
         sut = new TEnmoController(userDao, transactionDao);
     }
 
@@ -41,6 +41,13 @@ public class TEnmoControllerTests extends BaseDaoTests{
         userList.add(user3);
         Assert.assertEquals(3, sut.listUsers().size());
         Assert.assertEquals("user2", sut.listUsers().get(1).getUsername());
+    }
+
+    @Test
+    public void getBalance_returns_correct_balance(){
+        Assert.assertEquals(1000, sut.getBalance(1));
+
+
     }
 
 }
