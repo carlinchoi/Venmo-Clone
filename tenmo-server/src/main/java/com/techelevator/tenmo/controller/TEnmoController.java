@@ -40,7 +40,7 @@ public class TEnmoController {
 
     @RequestMapping(path = "/users/{id}", method = RequestMethod.GET)
     public BigDecimal getBalance(@RequestParam String userName, @PathVariable("id") int userId){
-        return userDao.findByUsername(userName).getBalance;
+        return userDao.findByUsername(userName).getBalance();
     }
 
     @RequestMapping(path = "/users/{id}/transfers", method = RequestMethod.GET)
