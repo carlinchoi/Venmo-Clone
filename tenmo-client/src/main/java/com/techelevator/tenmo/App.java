@@ -138,6 +138,8 @@ public class App {
                 }
             }
             System.out.println("-------------------------------------------");
+        } else {
+            consoleService.printErrorMessage();
         }
     }
 
