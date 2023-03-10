@@ -3,12 +3,13 @@ package com.techelevator.tenmo;
 import com.techelevator.tenmo.model.AuthenticatedUser;
 import com.techelevator.tenmo.model.Transaction;
 import com.techelevator.tenmo.model.UserCredentials;
+import com.techelevator.tenmo.model.UserDto;
 import com.techelevator.tenmo.services.AuthenticationService;
 import com.techelevator.tenmo.services.ConsoleService;
-import com.techelevator.tenmo.services.TenmoService;
+import com.techelevator.tenmo.services.TEnmoService;
 
 public class App {
-    private final TenmoService transactionService = new TenmoService();
+    private final TEnmoService tEnmoService = new TEnmoService();
 
     private static final String API_BASE_URL = "http://localhost:8080/";
 
@@ -55,11 +56,25 @@ public class App {
         }
     }
 
+//    private void handleLogin() {
+//        String username = consoleService.promptForString("Username: ");
+//        String password = consoleService.promptForString("Password: ");
+//        String token = authenticationService.login(username, password);
+//        if (token != null) {
+//            hotelService.setAuthToken(token);
+//        } else {
+//            consoleService.printErrorMessage();
+//        }
+//    }
+
     private void handleLogin() {
         UserCredentials credentials = consoleService.promptForCredentials();
         currentUser = authenticationService.login(credentials);
+        String token = currentUser.getToken();
         if (currentUser == null) {
             consoleService.printErrorMessage();
+        } else {
+            tEnmoService.setAuthToken(token);
         }
     }
 
@@ -94,16 +109,35 @@ public class App {
 
     private void viewTransferHistory() {
         // TODO Auto-generated method stub
-        Transaction[] transactions = transactionService.viewTransferHistory(currentUser.getUser().getId());
+        Transaction[] transactions = tEnmoService.viewTransferHistory(currentUser.getUser().getId());
         if (transactions != null) {
             System.out.println("-------------------------------------------");
             System.out.println("Transfers");
             System.out.println("ID                  From/To                  Amount");
+            System.out.println("-------------------------------------------");
+            UserDto[] userlist = tEnmoService.listUsers();
             for (Transaction transaction : transactions) {
                 if (transaction.getFromUserId() == currentUser.getUser().getId()) {
-                    System.out.println(transaction.getTransactionId() + "                  From: " +            );
+                    String toUser = null;
+                    for (UserDto userDto: userlist){
+                        if (userDto.getId() == transaction.getToUserId()){
+                            toUser = userDto.getUsername();
+                        }
+                    }
+                    System.out.println(transaction.getTransactionId() + "                  To: " + toUser + "      $" +
+                            transaction.getAmount().toString());
+                } else {
+                    String fromUser = null;
+                    for (UserDto userDto: userlist){
+                        if (userDto.getId() == transaction.getFromUserId()){
+                            fromUser = userDto.getUsername();
+                        }
+                    }
+                    System.out.println(transaction.getTransactionId() + "                  From: " + fromUser + "      $" +
+                            transaction.getAmount().toString());
                 }
             }
+            System.out.println("-------------------------------------------");
         }
     }
 
