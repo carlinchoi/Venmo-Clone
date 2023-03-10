@@ -80,12 +80,12 @@ public class App {
                 viewCurrentBalance();
             } else if (menuSelection == 2) {
                 viewTransferHistory();
+//            } else if (menuSelection == 3) {
+//                viewPendingRequests();
             } else if (menuSelection == 3) {
-                viewPendingRequests();
-            } else if (menuSelection == 4) {
                 sendBucks();
-            } else if (menuSelection == 5) {
-                requestBucks();
+//            } else if (menuSelection == 5) {
+//                requestBucks();
             } else if (menuSelection == 0) {
                 continue;
             } else {
@@ -123,7 +123,7 @@ public class App {
                 }
             }
             System.out.println("-------------------------------------------");
-            int viewTransferId = consoleService.promptForMenuSelection("Please enter transfer ID to view details (0 to cancel): ");
+            int viewTransferId = consoleService.promptForInt("Please enter transfer ID to view details (0 to cancel): ");
             Transaction viewTransaction = tEnmoService.viewTransaction(viewTransferId);
             if (viewTransaction != null) {
                 System.out.println("-------------------------------------------");
@@ -147,6 +147,22 @@ public class App {
     }
 
     private void sendBucks() {
+        UserDto[] userDtos = tEnmoService.listUsers();
+        System.out.println("---------------------------------------");
+        System.out.println("Users");
+        System.out.println("ID          Name");
+        System.out.println("---------------------------------------");
+        for (UserDto user : userDtos){
+            System.out.println(user.getId() + "         " + user.getUsername());
+        }
+        int transferToId = consoleService.promptForInt("Enter ID of user you are sending to (0 to cancel)");
+        BigDecimal amountToTransfer = consoleService.promptForBigDecimal("Enter amount: ");
+        Transaction transaction = new Transaction();
+        transaction.setAmount(amountToTransfer);
+        transaction.setFromUserId(currentUser.getUser().getId());
+        transaction.setToUserId(transferToId);
+        tEnmoService.sendBucks(transaction, currentUser.getUser().getId());
+
 
     }
 

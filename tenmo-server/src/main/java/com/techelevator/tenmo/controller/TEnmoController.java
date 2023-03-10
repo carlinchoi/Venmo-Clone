@@ -77,19 +77,23 @@ public class TEnmoController {
 
 
     @RequestMapping(path = "/users/{id}/", method = RequestMethod.POST)
-    public Transaction transfer(@Valid @RequestBody int fromUserId, int toUserId, BigDecimal amount){
-        Transaction transaction = new Transaction(fromUserId, toUserId, amount, 1, 1);
+    public Transaction transfer(@Valid @RequestBody Transaction transaction){
+        BigDecimal amount = transaction.getAmount();
         Transaction returnedTransaction = null;
-        User fromUser = userDao.getUserById(fromUserId);
-        User toUser = userDao.getUserById(toUserId);
-        if (toUser == null) {
+        User fromUser = userDao.getUserById(transaction.getFromUserId());
+        User toUser = userDao.getUserById(transaction.getToUserId());
+        if (toUser.getId() == fromUser.getId()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Can't send to yourself.");
+        }else if(amount.compareTo(new BigDecimal("0")) <=0){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Can't send 0 or less.");
+        } else if (toUser == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Receiving account not found.");
-        }else if(userDao.getUserById(fromUserId).getBalance().compareTo(amount) < 0) {
+        }else if(userDao.getUserById(transaction.getFromUserId()).getBalance().compareTo(amount) < 0) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Insufficient balance.");
         } else {
             BigDecimal newBalance = fromUser.getBalance().subtract(amount);
-            updateBalance(fromUserId, newBalance);
-            updateBalance(toUserId, toUser.getBalance().add(amount));
+            updateBalance(transaction.getFromUserId(), newBalance);
+            updateBalance(transaction.getToUserId(), toUser.getBalance().add(amount));
             returnedTransaction = transactionDao.createTransaction(transaction);
         }
         return returnedTransaction;
@@ -99,5 +103,6 @@ public class TEnmoController {
         User user = userDao.getUserById(userId);
         user.setBalance(amount);
         userDao.updateUser(user);
+
     }
 }

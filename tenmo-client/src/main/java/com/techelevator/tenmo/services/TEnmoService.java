@@ -5,6 +5,7 @@ import com.techelevator.tenmo.model.User;
 import com.techelevator.tenmo.model.UserDto;
 import com.techelevator.util.BasicLogger;
 import org.springframework.http.*;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestClientResponseException;
 import org.springframework.web.client.RestTemplate;
@@ -50,8 +51,9 @@ public class TEnmoService {
     }
 
 
-    private Transaction sendBucks(Transaction transaction, int userId) {
+    public Transaction sendBucks(Transaction transaction, int userId) {
         Transaction returnedTransaction = null;
+//        @Valid @RequestBody int fromUserId, int toUserId, BigDecimal amount
         try {
             returnedTransaction = restTemplate.postForObject(API_BASE_URL + userId, makeTransactionEntity(transaction),
                      Transaction.class);

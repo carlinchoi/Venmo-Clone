@@ -5,6 +5,7 @@ import com.techelevator.tenmo.dao.JdbcTransactionDao;
 import com.techelevator.tenmo.dao.JdbcUserDao;
 import com.techelevator.tenmo.dao.TransactionDao;
 import com.techelevator.tenmo.dao.UserDao;
+import com.techelevator.tenmo.model.Transaction;
 import com.techelevator.tenmo.model.UserDto;
 import org.junit.Assert;
 import org.junit.Before;
@@ -21,6 +22,10 @@ public class TEnmoControllerTests extends BaseDaoTests{
     private final UserDto user1 = new UserDto(1, "user1");
     private final UserDto user2 = new UserDto(1, "user2");
     private final UserDto user3 = new UserDto(1, "user3");
+    protected static final Transaction TRANSACTION_1 = new Transaction(3001,1001, 1002, new BigDecimal("100.00"), 1, 1);
+    protected static final Transaction TRANSACTION_2 = new Transaction(3002, 1002, 1003, new BigDecimal("500.00"), 1, 1);
+    protected static final Transaction TRANSACTION_3 = new Transaction(3003, 1003, 1001, new BigDecimal("100.00"), 1, 1);
+
     private List<UserDto> userList = new ArrayList<>();
 
 
@@ -63,9 +68,14 @@ public class TEnmoControllerTests extends BaseDaoTests{
 
     }
 
+//    protected static final Transaction TRANSACTION_1 = new Transaction(3001,1001, 1002, new BigDecimal("100.00"), 1, 1);
+//    protected static final Transaction TRANSACTION_2 = new Transaction(3002, 1002, 1003, new BigDecimal("500.00"), 1, 1);
+//    protected static final Transaction TRANSACTION_3 = new Transaction(3003, 1003, 1001, new BigDecimal("100.00"), 1, 1);
 
     @Test
     public void transfer_transfers_correct_amount(){
+        sut.transfer(TRANSACTION_1);
+        Assert.assertEquals(new BigDecimal("900.00"), sut.getBalance(1001));
 
     }
 

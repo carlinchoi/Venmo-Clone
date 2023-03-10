@@ -101,8 +101,10 @@ public class JdbcUserDao implements UserDao {
     //Finish this method that we added
     @Override
     public void updateUser(User user) {
-        String sql = "UPDATE tenmo_user" + "SET balance = ?" + "WHERE user_id = ?";
-        jdbcTemplate.update(sql, user.getBalance());
+        String sql = "UPDATE tenmo_user " +
+                     "SET balance = ? " +
+                     "WHERE user_id = ?";
+        jdbcTemplate.update(sql, user.getBalance(), user.getId());
     }
 
     private User mapRowToUser(SqlRowSet rs) {
