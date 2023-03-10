@@ -13,7 +13,7 @@ import java.math.BigDecimal;
 
 
 public class TEnmoService {
-    public static String API_BASE_URL = "http//localhost:8080/api/users/";
+    public static String API_BASE_URL = "http://localhost:8080/api/users/";
     private RestTemplate restTemplate = new RestTemplate();
 
     private String authToken = null;
