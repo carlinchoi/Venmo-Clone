@@ -22,18 +22,46 @@ public class TEnmoService {
         this.authToken = authToken;
     }
 
-
-    public BigDecimal viewCurrentBalance() {
-        // TODO Auto-generated method stub
-        return null;
+//    ResponseEntity<Auction> response =
+//            restTemplate.exchange(API_BASE_URL + id, HttpMethod.GET, makeAuthEntity(), Auction.class);
+//    auction = response.getBody();
+    public Transaction viewTransaction(int transactionId){
+        Transaction transaction = null;
+        try {
+            ResponseEntity<Transaction> response = restTemplate.exchange(API_BASE_URL + "transfers/" +
+                            transactionId, HttpMethod.GET, makeAuthEntity(), Transaction.class);
+            transaction = response.getBody();
+        } catch (RestClientResponseException | ResourceAccessException e) {
+            BasicLogger.log(e.getMessage());
+        }
+        return transaction;
     }
 
-    private void sendBucks(Transaction transaction, User userId) {
-        // TODO Auto-generated method stub
+    public BigDecimal viewCurrentBalance(int userId) {
+        BigDecimal balance = null;
+        try {
+            ResponseEntity<BigDecimal> response = restTemplate.exchange(API_BASE_URL + userId, HttpMethod.GET,
+                    makeAuthEntity(), BigDecimal.class);
+            balance = response.getBody();
+        } catch (RestClientResponseException | ResourceAccessException e) {
+            BasicLogger.log(e.getMessage());
+        }
+        return balance;
+    }
+
+
+    private Transaction sendBucks(Transaction transaction, int userId) {
+        Transaction returnedTransaction = null;
+        try {
+            returnedTransaction = restTemplate.postForObject(API_BASE_URL + userId, makeTransactionEntity(transaction),
+                     Transaction.class);
+        } catch (RestClientResponseException | ResourceAccessException e) {
+            BasicLogger.log(e.getMessage());
+        }
+        return returnedTransaction;
     }
 
     public Transaction[] viewTransferHistory(int userId) {
-        // TODO Auto-generated method stub
         Transaction[] transactions = null;
         try {
             ResponseEntity<Transaction[]> response = restTemplate.exchange(API_BASE_URL + userId + "/transfers",
@@ -57,9 +85,6 @@ public class TEnmoService {
         return users;
     }
 
-    public Transaction viewTransaction(int transactionId){
-        return null;
-    }
 
     private HttpEntity<Transaction> makeTransactionEntity(Transaction transaction) {
         HttpHeaders headers = new HttpHeaders();

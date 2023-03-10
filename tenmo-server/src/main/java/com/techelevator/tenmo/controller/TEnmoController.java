@@ -10,6 +10,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.validation.Valid;
 import java.math.BigDecimal;
 import java.security.Principal;
 import java.util.ArrayList;
@@ -64,9 +65,8 @@ public class TEnmoController {
 
     }
 
-    @RequestMapping(path = "/users/{userid}/transfers/{transferid}", method = RequestMethod.GET)
-    public Transaction getTransactionDetails(@PathVariable("userid") int userId, @PathVariable("transferid") int transferId){
-        User currentUser = userDao.getUserById(userId);
+    @RequestMapping(path = "/users/transfers/{transferid}", method = RequestMethod.GET)
+    public Transaction getTransactionDetails(@PathVariable("transferid") int transferId){
         Transaction transaction = transactionDao.getTransaction(transferId);
         if (transaction != null){
             return transaction;
@@ -77,8 +77,9 @@ public class TEnmoController {
 
 
     @RequestMapping(path = "/users/{id}/", method = RequestMethod.POST)
-    public void transfer(int fromUserId, int toUserId, BigDecimal amount){
+    public Transaction transfer(@Valid @RequestBody int fromUserId, int toUserId, BigDecimal amount){
         Transaction transaction = new Transaction(fromUserId, toUserId, amount, 1, 1);
+        Transaction returnedTransaction = null;
         User fromUser = userDao.getUserById(fromUserId);
         User toUser = userDao.getUserById(toUserId);
         if (toUser == null) {
@@ -89,8 +90,9 @@ public class TEnmoController {
             BigDecimal newBalance = fromUser.getBalance().subtract(amount);
             updateBalance(fromUserId, newBalance);
             updateBalance(toUserId, toUser.getBalance().add(amount));
-            transactionDao.createTransaction(transaction);
+            returnedTransaction = transactionDao.createTransaction(transaction);
         }
+        return returnedTransaction;
     }
 
     public void updateBalance(int userId, BigDecimal amount){

@@ -8,6 +8,8 @@ import com.techelevator.tenmo.services.AuthenticationService;
 import com.techelevator.tenmo.services.ConsoleService;
 import com.techelevator.tenmo.services.TEnmoService;
 
+import java.math.BigDecimal;
+
 public class App {
     private final TEnmoService tEnmoService = new TEnmoService();
 
@@ -30,6 +32,7 @@ public class App {
             mainMenu();
         }
     }
+
     private void loginMenu() {
         int menuSelection = -1;
         while (menuSelection != 0 && currentUser == null) {
@@ -56,16 +59,6 @@ public class App {
         }
     }
 
-//    private void handleLogin() {
-//        String username = consoleService.promptForString("Username: ");
-//        String password = consoleService.promptForString("Password: ");
-//        String token = authenticationService.login(username, password);
-//        if (token != null) {
-//            hotelService.setAuthToken(token);
-//        } else {
-//            consoleService.printErrorMessage();
-//        }
-//    }
 
     private void handleLogin() {
         UserCredentials credentials = consoleService.promptForCredentials();
@@ -103,41 +96,46 @@ public class App {
     }
 
     private void viewCurrentBalance() {
-        // TODO Auto-generated method stub
-
+        BigDecimal balance = tEnmoService.viewCurrentBalance(currentUser.getUser().getId());
+        if (balance != null) {
+            System.out.println("Your current account balance is: $" + balance);
+        } else {
+            consoleService.printErrorMessage();
+        }
     }
 
     private void viewTransferHistory() {
-        // TODO Auto-generated method stub
         Transaction[] transactions = tEnmoService.viewTransferHistory(currentUser.getUser().getId());
         if (transactions != null) {
             System.out.println("-------------------------------------------");
             System.out.println("Transfers");
             System.out.println("ID                  From/To                  Amount");
             System.out.println("-------------------------------------------");
-            UserDto[] userlist = tEnmoService.listUsers();
             for (Transaction transaction : transactions) {
                 if (transaction.getFromUserId() == currentUser.getUser().getId()) {
-                    String toUser = null;
-                    for (UserDto userDto: userlist){
-                        if (userDto.getId() == transaction.getToUserId()){
-                            toUser = userDto.getUsername();
-                        }
-                    }
+                    String toUser = getUserById(transaction.getToUserId());
                     System.out.println(transaction.getTransactionId() + "                  To: " + toUser + "      $" +
                             transaction.getAmount().toString());
                 } else {
-                    String fromUser = null;
-                    for (UserDto userDto: userlist){
-                        if (userDto.getId() == transaction.getFromUserId()){
-                            fromUser = userDto.getUsername();
-                        }
-                    }
+                    String fromUser = getUserById(transaction.getFromUserId());
                     System.out.println(transaction.getTransactionId() + "                  From: " + fromUser + "      $" +
                             transaction.getAmount().toString());
                 }
             }
             System.out.println("-------------------------------------------");
+            int viewTransferId = consoleService.promptForMenuSelection("Please enter transfer ID to view details (0 to cancel): ");
+            Transaction viewTransaction = tEnmoService.viewTransaction(viewTransferId);
+            if (viewTransaction != null) {
+                System.out.println("-------------------------------------------");
+                System.out.println("Transfer Details");
+                System.out.println("-------------------------------------------");
+                System.out.println("Id: " + viewTransaction.getTransactionId());
+                System.out.println("From: " + getUserById(viewTransaction.getFromUserId()));
+                System.out.println("To: " + getUserById(viewTransaction.getToUserId()));
+                System.out.println("Type: Send");
+                System.out.println("Status: Approved");
+                System.out.println("Amount: $" + viewTransaction.getAmount());
+            }
         } else {
             consoleService.printErrorMessage();
         }
@@ -149,13 +147,22 @@ public class App {
     }
 
     private void sendBucks() {
-        // TODO Auto-generated method stub
 
     }
 
     private void requestBucks() {
         // TODO Auto-generated method stub
 
+    }
+
+    private String getUserById(int userId) {
+        UserDto[] userlist = tEnmoService.listUsers();
+        for (UserDto userDto : userlist) {
+            if (userDto.getId() == userId) {
+                return userDto.getUsername();
+            }
+        }
+        return null;
     }
 
 }
