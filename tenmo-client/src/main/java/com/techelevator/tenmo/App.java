@@ -1,11 +1,14 @@
 package com.techelevator.tenmo;
 
 import com.techelevator.tenmo.model.AuthenticatedUser;
+import com.techelevator.tenmo.model.Transaction;
 import com.techelevator.tenmo.model.UserCredentials;
 import com.techelevator.tenmo.services.AuthenticationService;
 import com.techelevator.tenmo.services.ConsoleService;
+import com.techelevator.tenmo.services.TenmoService;
 
 public class App {
+    private final TenmoService transactionService = new TenmoService();
 
     private static final String API_BASE_URL = "http://localhost:8080/";
 
@@ -84,29 +87,39 @@ public class App {
         }
     }
 
-	private void viewCurrentBalance() {
-		// TODO Auto-generated method stub
-		
-	}
+    private void viewCurrentBalance() {
+        // TODO Auto-generated method stub
 
-	private void viewTransferHistory() {
-		// TODO Auto-generated method stub
-		
-	}
+    }
 
-	private void viewPendingRequests() {
-		// TODO Auto-generated method stub
-		
-	}
+    private void viewTransferHistory() {
+        // TODO Auto-generated method stub
+        Transaction[] transactions = transactionService.viewTransferHistory(currentUser.getUser().getId());
+        if (transactions != null) {
+            System.out.println("-------------------------------------------");
+            System.out.println("Transfers");
+            System.out.println("ID                  From/To                  Amount");
+            for (Transaction transaction : transactions) {
+                if (transaction.getFromUserId() == currentUser.getUser().getId()) {
+                    System.out.println(transaction.getTransactionId() + "                  From: " +            );
+                }
+            }
+        }
+    }
 
-	private void sendBucks() {
-		// TODO Auto-generated method stub
-		
-	}
+    private void viewPendingRequests() {
+        // TODO Auto-generated method stub
 
-	private void requestBucks() {
-		// TODO Auto-generated method stub
-		
-	}
+    }
+
+    private void sendBucks() {
+        // TODO Auto-generated method stub
+
+    }
+
+    private void requestBucks() {
+        // TODO Auto-generated method stub
+
+    }
 
 }
