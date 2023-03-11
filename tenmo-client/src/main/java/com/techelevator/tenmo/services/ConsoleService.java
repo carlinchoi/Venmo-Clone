@@ -22,9 +22,25 @@ public class ConsoleService {
     }
 
     public void printGreeting() {
-        System.out.println("*********************");
-        System.out.println("* Welcome to TEnmo! *");
-        System.out.println("*********************");
+        System.out.println("********************************************************************************");
+        System.out.println("********************************************************************************");
+        System.out.println("**            ,----,                                                          **");
+        System.out.println("**          ,/   .`|                                                          **");
+        System.out.println("**        ,`   .'  :     ,---,.                        ____                   **");
+        System.out.println("**      ;    ;     /   ,'  .' |                      ,'  , `.                 **");
+        System.out.println("**    .'___,/    ,'  ,---.'   |       ,---,       ,-+-,.' _ |    ,---.        **");
+        System.out.println("**    |    :     |   |   |   .'   ,-+-. /  |   ,-+-. ;   , ||   '   ,'\\       **");
+        System.out.println("**    ;    |.';  ;   :   :  |-,  ,--.'|'   |  ,--.'|'   |  ||  /   /   |      **");
+        System.out.println("**    `----'  |  |   :   |  ;/| |   |  ,'' | |   |  ,', |  |, .   ; ,. :      **");
+        System.out.println("**        '   :  ;   |   :   .' |   | /  | | |   | /  | |--'  '   | |: :      **");
+        System.out.println("**        |   |  '   |   |  |-, |   | |  | | |   : |  | ,     '   | .; :      **");
+        System.out.println("**        '   :  |   '   :  ;/| |   | |  |/  |   : |  |/      |   :    |      **");
+        System.out.println("**        ;   |.'    |   |    | |   | |--'   |   | |`-'       \\   \\  /        **");
+        System.out.println("**        '---'      |   :   .' |   |/       |   ;/             `----'        **");
+        System.out.println("**                   |   | ,'   '---'        '---'                            **");
+        System.out.println("**                   `----'                                                   **");
+        System.out.println("********************************************************************************");
+        System.out.println("********************************************************************************");
     }
 
     public void printLoginMenu() {
