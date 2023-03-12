@@ -2,6 +2,7 @@ package com.techelevator.tenmo;
 
 import com.techelevator.tenmo.dao.JdbcTransactionDao;
 import com.techelevator.tenmo.model.Transaction;
+import com.techelevator.tenmo.model.User;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -52,6 +53,13 @@ public class JdbcTransactionDaoTests extends BaseDaoTests {
         Transaction actualTransaction = sut.getTransaction(TRANSACTION_1.getTransactionId());
 
         assertTransactionsMatch(TRANSACTION_1, actualTransaction);
+    }
+
+    @Test
+    public void getTransactionByTransactionId_returns_null_correctly(){
+
+        Transaction actualTransaction = sut.getTransaction(-1);
+        Assert.assertNull(actualTransaction);
     }
 
 

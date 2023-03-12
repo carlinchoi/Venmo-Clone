@@ -32,8 +32,12 @@ public class TEnmoService {
             ResponseEntity<Transaction> response = restTemplate.exchange(API_BASE_URL + "transfers/" +
                             transactionId, HttpMethod.GET, makeAuthEntity(), Transaction.class);
             transaction = response.getBody();
+            if (response.getStatusCode() == HttpStatus.NOT_FOUND){
+                BasicLogger.log(response.getStatusCode().toString());
+            }
         } catch (RestClientResponseException | ResourceAccessException e) {
             BasicLogger.log(e.getMessage());
+            return null;
         }
         return transaction;
     }
@@ -46,6 +50,7 @@ public class TEnmoService {
             balance = response.getBody();
         } catch (RestClientResponseException | ResourceAccessException e) {
             BasicLogger.log(e.getMessage());
+            return null;
         }
         return balance;
     }
@@ -59,6 +64,7 @@ public class TEnmoService {
                      Transaction.class);
         } catch (RestClientResponseException | ResourceAccessException e) {
             BasicLogger.log(e.getMessage());
+            return null;
         }
         return returnedTransaction;
     }
@@ -71,6 +77,7 @@ public class TEnmoService {
             transactions = response.getBody();
         } catch (RestClientResponseException | ResourceAccessException e) {
             BasicLogger.log(e.getMessage());
+            return null;
         }
         return transactions;
     }
@@ -83,6 +90,7 @@ public class TEnmoService {
             users = response.getBody();
         } catch (RestClientResponseException | ResourceAccessException e) {
             BasicLogger.log(e.getMessage());
+            return null;
         }
         return users;
     }

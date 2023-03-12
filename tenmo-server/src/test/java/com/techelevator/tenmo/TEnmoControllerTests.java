@@ -68,6 +68,12 @@ public class TEnmoControllerTests extends BaseDaoTests{
 
     }
 
+    @Test(expected = ResponseStatusException.class)
+    public void getTransactionDetails_returns_exception_given_invalid_id(){
+        sut.getTransactionDetails(-1);
+
+    }
+
 //    protected static final Transaction TRANSACTION_1 = new Transaction(3001,1001, 1002, new BigDecimal("100.00"), 1, 1);
 //    protected static final Transaction TRANSACTION_2 = new Transaction(3002, 1002, 1003, new BigDecimal("500.00"), 1, 1);
 //    protected static final Transaction TRANSACTION_3 = new Transaction(3003, 1003, 1001, new BigDecimal("100.00"), 1, 1);

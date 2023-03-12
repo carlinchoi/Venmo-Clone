@@ -78,8 +78,9 @@ public class JdbcUserDao implements UserDao {
 
     @Override
     public boolean create(String username, String password) {
-
-        // create user
+        if (username != null) {
+            username = username.toLowerCase();
+        }
         String sql = "INSERT INTO tenmo_user (username, password_hash, balance) VALUES (?, ?, 1000) RETURNING user_id";
         String password_hash = new BCryptPasswordEncoder().encode(password);
         Integer newUserId;

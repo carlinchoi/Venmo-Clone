@@ -5,6 +5,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Positive;
 
 public class Transaction {
+
     private int transactionId;
 
 

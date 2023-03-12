@@ -5,7 +5,6 @@ import java.math.BigDecimal;
 public class Transaction {
     private int transactionId;
 
-
     private int fromUserId;
 
     private int toUserId;

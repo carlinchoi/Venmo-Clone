@@ -82,12 +82,12 @@ public class TEnmoController {
         Transaction returnedTransaction = null;
         User fromUser = userDao.getUserById(transaction.getFromUserId());
         User toUser = userDao.getUserById(transaction.getToUserId());
-        if (toUser.getId() == fromUser.getId()) {
+        if (toUser == null){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Receiving account not found.");
+        }else if (toUser.getId() == fromUser.getId()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Can't send to yourself.");
         }else if(amount.compareTo(new BigDecimal("0")) <=0){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Can't send 0 or less.");
-        } else if (toUser == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Receiving account not found.");
         }else if(userDao.getUserById(transaction.getFromUserId()).getBalance().compareTo(amount) < 0) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Insufficient balance.");
         } else {

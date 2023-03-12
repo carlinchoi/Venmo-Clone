@@ -63,10 +63,10 @@ public class App {
     private void handleLogin() {
         UserCredentials credentials = consoleService.promptForCredentials();
         currentUser = authenticationService.login(credentials);
-        String token = currentUser.getToken();
         if (currentUser == null) {
             consoleService.printErrorMessage();
         } else {
+            String token = currentUser.getToken();
             tEnmoService.setAuthToken(token);
         }
     }
@@ -124,17 +124,21 @@ public class App {
             }
             System.out.println("-------------------------------------------");
             int viewTransferId = consoleService.promptForInt("Please enter transfer ID to view details (0 to cancel): ");
-            Transaction viewTransaction = tEnmoService.viewTransaction(viewTransferId);
-            if (viewTransaction != null) {
-                System.out.println("-------------------------------------------");
-                System.out.println("Transfer Details");
-                System.out.println("-------------------------------------------");
-                System.out.println("Id: " + viewTransaction.getTransactionId());
-                System.out.println("From: " + getUserById(viewTransaction.getFromUserId()));
-                System.out.println("To: " + getUserById(viewTransaction.getToUserId()));
-                System.out.println("Type: Send");
-                System.out.println("Status: Approved");
-                System.out.println("Amount: $" + viewTransaction.getAmount());
+            if (viewTransferId != 0) {
+                Transaction viewTransaction = tEnmoService.viewTransaction(viewTransferId);
+                if (viewTransaction != null) {
+                    System.out.println("-------------------------------------------");
+                    System.out.println("Transfer Details");
+                    System.out.println("-------------------------------------------");
+                    System.out.println("Id: " + viewTransaction.getTransactionId());
+                    System.out.println("From: " + getUserById(viewTransaction.getFromUserId()));
+                    System.out.println("To: " + getUserById(viewTransaction.getToUserId()));
+                    System.out.println("Type: Send");
+                    System.out.println("Status: Approved");
+                    System.out.println("Amount: $" + viewTransaction.getAmount());
+                } else {
+                    consoleService.printErrorMessage();
+                }
             }
         } else {
             consoleService.printErrorMessage();
@@ -156,15 +160,19 @@ public class App {
             System.out.println(user.getId() + "         " + user.getUsername());
         }
         int transferToId = consoleService.promptForInt("Enter ID of user you are sending to (0 to cancel)");
-        BigDecimal amountToTransfer = consoleService.promptForBigDecimal("Enter amount: ");
-        Transaction transaction = new Transaction();
-        transaction.setAmount(amountToTransfer);
-        transaction.setFromUserId(currentUser.getUser().getId());
-        transaction.setToUserId(transferToId);
-        System.out.println(transaction.getAmount());
-        System.out.println(transaction.getFromUserId());
-        System.out.println(transaction.getToUserId());
-        tEnmoService.sendBucks(transaction, currentUser.getUser().getId());
+        if (transferToId != 0) {
+            BigDecimal amountToTransfer = consoleService.promptForBigDecimal("Enter amount: ");
+            Transaction transaction = new Transaction();
+            transaction.setAmount(amountToTransfer);
+            transaction.setFromUserId(currentUser.getUser().getId());
+            transaction.setToUserId(transferToId);
+            if (tEnmoService.sendBucks(transaction, currentUser.getUser().getId()) != null) {
+                System.out.println("Transaction successful.");
+            } else {
+                consoleService.printErrorMessage();
+            }
+        }
+
 
 
     }
