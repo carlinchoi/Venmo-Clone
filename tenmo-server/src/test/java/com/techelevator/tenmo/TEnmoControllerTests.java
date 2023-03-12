@@ -53,7 +53,7 @@ public class TEnmoControllerTests extends BaseDaoTests{
 
     @Test
     public void getBalance_returns_correct_balance(){
-        Assert.assertEquals(new BigDecimal("1000"), sut.getBalance(1001));
+        Assert.assertEquals(new BigDecimal("1000.00"), sut.getBalance(1001));
 
 
     }

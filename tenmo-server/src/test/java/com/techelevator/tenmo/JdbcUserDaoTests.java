@@ -47,9 +47,9 @@ public class JdbcUserDaoTests extends BaseDaoTests {
         sut.findByUsername(null);
     }
 
-    @Test(expected = UsernameNotFoundException.class)
-    public void findByUsername_given_invalid_username_throws_exception() {
-        sut.findByUsername("invalid");
+    @Test
+    public void findByUsername_given_invalid_returns_null() {
+        Assert.assertEquals(null,sut.findByUsername("invalid"));
     }
 
     @Test
@@ -117,7 +117,7 @@ public class JdbcUserDaoTests extends BaseDaoTests {
     @Test
     public void getUserById_returns_balance() {
         User testUser = new User(1, "user1", "user1", "ROLE_USER");
-        testUser.setBalance(new BigDecimal("1000"));
+        testUser.setBalance(new BigDecimal("1000.00"));
 
         Assert.assertEquals(testUser.getBalance(), sut.getUserById(1001).getBalance());
 

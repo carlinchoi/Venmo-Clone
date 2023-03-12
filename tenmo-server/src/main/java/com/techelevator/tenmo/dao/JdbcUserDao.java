@@ -73,7 +73,7 @@ public class JdbcUserDao implements UserDao {
         if (rowSet.next()) {
             return mapRowToUser(rowSet);
         }
-        throw new UsernameNotFoundException("User " + username + " was not found.");
+        return null;
     }
 
     @Override
@@ -114,7 +114,7 @@ public class JdbcUserDao implements UserDao {
         user.setPassword(rs.getString("password_hash"));
         user.setActivated(true);
         user.setAuthorities("USER");
-        user.setBalance(new BigDecimal("1000"));
+        user.setBalance(rs.getBigDecimal("balance"));
         return user;
     }
 }

@@ -161,6 +161,9 @@ public class App {
         transaction.setAmount(amountToTransfer);
         transaction.setFromUserId(currentUser.getUser().getId());
         transaction.setToUserId(transferToId);
+        System.out.println(transaction.getAmount());
+        System.out.println(transaction.getFromUserId());
+        System.out.println(transaction.getToUserId());
         tEnmoService.sendBucks(transaction, currentUser.getUser().getId());
 
 

@@ -76,7 +76,7 @@ public class TEnmoController {
     }
 
 
-    @RequestMapping(path = "/users/{id}/", method = RequestMethod.POST)
+    @RequestMapping(path = "/users/{id}", method = RequestMethod.POST)
     public Transaction transfer(@Valid @RequestBody Transaction transaction){
         BigDecimal amount = transaction.getAmount();
         Transaction returnedTransaction = null;

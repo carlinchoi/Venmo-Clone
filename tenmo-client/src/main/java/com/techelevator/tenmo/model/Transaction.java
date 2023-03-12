@@ -10,12 +10,9 @@ public class Transaction {
 
     private int toUserId;
 
-
     private BigDecimal amount;
 
-
     private int transferStatus;
-
 
     private int transferTypeId;
 

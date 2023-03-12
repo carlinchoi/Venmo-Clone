@@ -7,19 +7,19 @@ import javax.validation.constraints.Positive;
 public class Transaction {
     private int transactionId;
 
-    @NotBlank(message = "The from user ID cannot be blank")
+
     private int fromUserId;
 
-    @NotBlank(message = "The to user ID cannot be blank")
+
     private int toUserId;
 
-    @Positive(message = "The amount must be greater than 0.")
+
     private BigDecimal amount;
 
-    @NotBlank(message = "The transfer status cannot be blank")
+
     private int transferStatus;
 
-    @NotBlank(message = "The transfer type cannot be blank")
+
     private int transferTypeId;
 
     public Transaction () {
