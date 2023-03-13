@@ -45,19 +45,25 @@ public class TEnmoController {
 
     @RequestMapping(path = "/users/{id}", method = RequestMethod.GET)
     public BigDecimal getBalance(@PathVariable("id") int userId){
-        BigDecimal balance = userDao.getUserById(userId).getBalance();
-        if(balance != null) {
-            return balance;
-        } else {
+        BigDecimal balance;
+        try {
+            balance = userDao.getUserById(userId).getBalance();
+        } catch (Exception e){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No balance found. This should not be possible.");
         }
+        return balance;
+//        BigDecimal balance = userDao.getUserById(userId).getBalance();
+//        if(balance != null) {
+//            return balance;
+//        } else {
+//            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No balance found. This should not be possible.");
+//        }
     }
 
     @RequestMapping(path = "/users/{id}/transfers", method = RequestMethod.GET)
     public List<Transaction> listTransactionsOfUser(@PathVariable("id") int userId){
-        User currentUser = userDao.getUserById(userId);
-        List<Transaction> transactions = transactionDao.listTransaction(currentUser.getId());
-        if (transactions != null) {
+        List<Transaction> transactions = transactionDao.listTransaction(userId);
+        if (transactions.size() > 0) {
             return transactions;
         } else {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No transactions found.");

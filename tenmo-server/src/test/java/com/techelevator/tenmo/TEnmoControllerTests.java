@@ -12,6 +12,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.datasource.SingleConnectionDataSource;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.math.BigDecimal;
@@ -50,22 +51,47 @@ public class TEnmoControllerTests extends BaseDaoTests{
         Assert.assertEquals("user2", sut.listUsers().get(1).getUsername());
     }
 
+    @Test(expected = ResponseStatusException.class)
+    public void listTransactionsOfUser_returns_exception_given_invalid_id(){
+        sut.listTransactionsOfUser(-1);
+    }
 
+    @Test(expected = ResponseStatusException.class)
+    public void transfer_throws_exception_null_user(){
+        Transaction testTransaction = new Transaction(3001,1001, -1, new BigDecimal("100.00"), 1, 1);
+        sut.transfer(testTransaction);
+
+    }
+    @Test(expected = ResponseStatusException.class)
+    public void transfer_throws_exception_same_user(){
+        Transaction testTransaction2 = new Transaction(3001,1001, 1001, new BigDecimal("100.00"), 1, 1);
+        sut.transfer(testTransaction2);
+    }
+    @Test(expected = ResponseStatusException.class)
+    public void transfer_throws_exception_negative_value(){
+        Transaction testTransaction3 = new Transaction(3001,1001, 1002, new BigDecimal("-1"), 1, 1);
+        sut.transfer(testTransaction3);
+
+    }
+
+
+    @Test(expected = ResponseStatusException.class)
+    public void getBalance_returns_exception_given_invalid_id(){
+        sut.getBalance(-1);
+    }
     @Test
     public void getBalance_returns_correct_balance(){
         Assert.assertEquals(new BigDecimal("1000.00"), sut.getBalance(1001));
-
-
     }
 
     @Test
     public void listTransactionsOfUser_returns_correct_transactions(){
-      //  Assert.assertEquals();
+      Assert.assertEquals(new BigDecimal("100.00"), sut.listTransactionsOfUser(1001).get(0).getAmount());
     }
 
     @Test
     public void getTransactionDetails_returns_correct_transaction(){
-
+        Assert.assertEquals(new BigDecimal("100.00"), sut.getTransactionDetails(3001).getAmount());
     }
 
     @Test(expected = ResponseStatusException.class)
